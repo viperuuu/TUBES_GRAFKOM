@@ -105,8 +105,8 @@ export function AboutDialog({ onClose }: AboutDialogProps) {
               </div>
               {[
                 { name: 'Fawwaz Ainun Hisyam', role: 'Lead Developer' },
-                { name: 'Team Member 2', role: 'UI Designer' },
-                { name: 'Team Member 3', role: 'Programmer' },
+                { name: 'Milan & Niken', role: 'UI Designer' },
+                { name: 'Hamdan & Tegar', role: 'Programmer' },
               ].map((member, i) => (
                 <div
                   key={i}
