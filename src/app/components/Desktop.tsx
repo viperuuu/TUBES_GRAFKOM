@@ -51,7 +51,7 @@ export function Desktop() {
 
   return (
     <div
-      className="w-[1366px] h-[768px] relative overflow-hidden select-none"
+      className="w-full h-full relative overflow-hidden select-none"
       style={{
         fontFamily: '"Segoe UI", "Tahoma", "MS Sans Serif", Arial, sans-serif',
         background: 'linear-gradient(135deg, #1a6b3c 0%, #2d8a55 30%, #246b45 60%, #1a5c3a 100%)',

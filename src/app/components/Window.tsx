@@ -45,24 +45,32 @@ export function Window({
   const isDragging = useRef(false);
   const dragStart = useRef({ mouseX: 0, mouseY: 0, winX: 0, winY: 0 });
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handlePointerDown = (e: React.MouseEvent | React.TouchEvent) => {
     isDragging.current = true;
-    dragStart.current = { mouseX: e.clientX, mouseY: e.clientY, winX: pos.x, winY: pos.y };
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    dragStart.current = { mouseX: clientX, mouseY: clientY, winX: pos.x, winY: pos.y };
     onFocus?.();
-    const onMove = (ev: MouseEvent) => {
+    const onMove = (ev: MouseEvent | TouchEvent) => {
       if (!isDragging.current) return;
+      const mX = 'touches' in ev ? ev.touches[0].clientX : ev.clientX;
+      const mY = 'touches' in ev ? ev.touches[0].clientY : ev.clientY;
       setPos({
-        x: dragStart.current.winX + ev.clientX - dragStart.current.mouseX,
-        y: dragStart.current.winY + ev.clientY - dragStart.current.mouseY,
+        x: dragStart.current.winX + mX - dragStart.current.mouseX,
+        y: dragStart.current.winY + mY - dragStart.current.mouseY,
       });
     };
     const onUp = () => {
       isDragging.current = false;
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onUp);
     };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchmove', onMove);
+    window.addEventListener('touchend', onUp);
   };
 
   const activeTitleBg = 'linear-gradient(to bottom, #b4d3f3 0%, #85b0e5 45%, #6998d6 50%, #85b1e5 100%)';
@@ -90,7 +98,8 @@ export function Window({
 
         {/* Title Bar */}
         <div
-          onMouseDown={handleMouseDown}
+          onMouseDown={handlePointerDown}
+          onTouchStart={handlePointerDown}
           className="h-[30px] px-2 flex items-center justify-between cursor-move"
           style={{
             background: isActive ? activeTitleBg : inactiveTitleBg,
